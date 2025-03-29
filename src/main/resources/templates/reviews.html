@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reviews list</title>
+</head>
+<body>
+
+<div>
+    <a href="/authors">
+        <button type="button">Authors</button>
+    </a>
+    <a href="/books">
+        <button type="button">Books</button>
+    </a>
+    <a href="/reviews">
+        <button type="button">Reviews</button>
+    </a>
+    <a href="/readers">
+        <button type="button">Readers</button>
+    </a>
+</div>
+
+<h2>Dodaj nową recenzję</h2>
+<form action="/reviews/add" method="post">
+    <label>Ocena:</label>
+    <input type="number" name="rating" required>
+    <label>Treść:</label>
+    <textarea name="comment" required></textarea>
+    <label>Czytelnik ID:</label>
+    <input type="number" name="readerId" required>
+    <label>Książka ID:</label>
+    <input type="number" name="bookId" required>
+    <button type="submit">Dodaj</button>
+</form>
+
+<h1>Lista Recenzji</h1>
+
+<form action="/reviews" method="get">
+    <label>Ocena:</label>
+    <input type="number" name="rating" th:value="${rating}">
+    <label>Czytelnik ID:</label>
+    <input type="number" name="readerId" th:value="${readerId}">
+    <label>Książka ID:</label>
+    <input type="number" name="bookId" th:value="${bookId}">
+    <label>Sortuj po:</label>
+    <select name="sortBy">
+        <option value="id" th:selected="${sortBy == 'id'}">Id</option>
+        <option value="rating" th:selected="${sortBy == 'rating'}">Ocena</option>
+        <option value="readerId" th:selected="${sortBy == 'readerId'}">Czytelnik ID</option>
+        <option value="bookId" th:selected="${sortBy == 'bookId'}">Książka ID</option>
+    </select>
+    <label>Porządek:</label>
+    <select name="order">
+        <option value="asc" th:selected="${order == 'asc'}">Rosnąco</option>
+        <option value="desc" th:selected="${order == 'desc'}">Malejąco</option>
+    </select>
+    <button type="submit">Wyszukaj</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ocena</th>
+        <th>Czytelnik ID</th>
+        <th>Książka ID</th>
+        <th>Treść</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="review : ${reviews}">
+        <td th:text="${review.id}"></td>
+        <td>
+            <form action="/reviews/update" method="post">
+                <input type="hidden" name="id" th:value="${review.id}">
+                <input type="number" name="rating" th:value="${review.rating}">
+                <textarea name="comment" th:text="${review.comment}"></textarea>
+                <input type="number" name="readerId" th:value="${review.reader.id}">
+                <input type="number" name="bookId" th:value="${review.book.id}">
+                <button type="submit">Zapisz</button>
+            </form>
+        </td>
+        <td>
+            <form action="/reviews/delete" method="get">
+                <input type="hidden" name="id" th:value="${review.id}">
+                <button type="submit">Usuń</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

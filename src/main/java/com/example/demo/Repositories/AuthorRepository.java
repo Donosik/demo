@@ -1,0 +1,12 @@
+package com.example.demo.Repositories;
+
+import com.example.demo.DB.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import org.springframework.data.domain.Sort;
+
+public interface AuthorRepository extends JpaRepository<Author, Long> {
+
+    List<Author> findByFirstNameContainingAndLastNameContaining(String firstName, String lastName, Sort sort);
+}

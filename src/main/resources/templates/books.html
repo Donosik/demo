@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Books list</title>
+</head>
+<body>
+
+<div>
+    <a href="/authors">
+        <button type="button">Authors</button>
+    </a>
+    <a href="/books">
+        <button type="button">Books</button>
+    </a>
+    <a href="/reviews">
+        <button type="button">Reviews</button>
+    </a>
+    <a href="/readers">
+        <button type="button">Readers</button>
+    </a>
+</div>
+
+<h2>Dodaj nową książkę</h2>
+<form action="/books/add" method="post">
+    <label>Tytuł:</label>
+    <input type="text" name="title" required>
+    <label>Autor ID:</label>
+    <input type="number" name="authorId" required>
+    <button type="submit">Dodaj</button>
+</form>
+
+<h1>Lista Książek</h1>
+
+<form action="/books" method="get">
+    <label>Tytuł:</label>
+    <input type="text" name="title" th:value="${title}">
+    <label>Autor ID:</label>
+    <input type="number" name="authorId" th:value="${authorId}">
+    <label>Sortuj po:</label>
+    <select name="sortBy">
+        <option value="id" th:selected="${sortBy == 'id'}">Id</option>
+        <option value="title" th:selected="${sortBy == 'title'}">Tytuł</option>
+        <option value="authorId" th:selected="${sortBy == 'authorId'}">Autor ID</option>
+    </select>
+    <label>Porządek:</label>
+    <select name="order">
+        <option value="asc" th:selected="${order == 'asc'}">Rosnąco</option>
+        <option value="desc" th:selected="${order == 'desc'}">Malejąco</option>
+    </select>
+    <button type="submit">Wyszukaj</button>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tytuł</th>
+        <th>Autor ID</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.id}"></td>
+        <td>
+            <form action="/books/update" method="post">
+                <input type="hidden" name="id" th:value="${book.id}">
+                <input type="text" name="title" th:value="${book.title}">
+                <input type="number" name="authorId" th:value="${book.author.id}">
+                <button type="submit">Zapisz</button>
+            </form>
+        </td>
+        <td>
+            <form action="/books/delete" method="get">
+                <input type="hidden" name="id" th:value="${book.id}">
+                <button type="submit">Usuń</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

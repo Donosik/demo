@@ -26,6 +26,14 @@ public class ReaderWebController {
         return "readers";
     }
 
+    @GetMapping("/readers-QBE")
+    public String readersQBE(Model model,@RequestParam(required = false) String lastName)
+    {
+        model.addAttribute("readers", readerService.getReadersQBE(lastName));
+        model.addAttribute("lastName", lastName);
+        return "readers-QBE";
+    }
+
     @PostMapping("/readers/update")
     public String updateReader(@ModelAttribute Reader reader) {
         readerService.save(reader);

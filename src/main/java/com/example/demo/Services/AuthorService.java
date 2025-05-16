@@ -2,6 +2,7 @@ package com.example.demo.Services;
 
 import com.example.demo.DB.Author;
 import com.example.demo.Repositories.AuthorRepository;
+import com.example.demo.projections.AuthorView;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,9 @@ public class AuthorService {
 
     public List<Author> getAll() {
         return authorRepository.findAll();
+    }
+    public List<AuthorView> getAllProjected() {
+        return authorRepository.findAllProjectedBy();
     }
 
     public Page<Author> getAuthors(String firstName, String lastName, Pageable pageable) {

@@ -44,6 +44,12 @@ public class AuthorWebController {
         return "authors";
     }
 
+    @GetMapping("/authors-names")
+    public String authorsNames(Model model)
+    {
+        model.addAttribute("authorNames", authorService.getAllProjected());
+        return "authors-names";
+    }
 
     @PostMapping("/authors/update")
     public String updateAuthor(@ModelAttribute Author author) {

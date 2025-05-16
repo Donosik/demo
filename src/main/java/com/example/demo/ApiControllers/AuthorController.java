@@ -2,6 +2,7 @@ package com.example.demo.ApiControllers;
 
 import com.example.demo.Services.AuthorService;
 import com.example.demo.DB.Author;
+import com.example.demo.projections.AuthorView;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,12 @@ public class AuthorController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
         return authorService.getAuthors(firstName, lastName,pageable);
+    }
+
+    @GetMapping("/names")
+    public List<AuthorView> getAuthorsNames()
+    {
+        return authorService.getAllProjected();
     }
 
     @PostMapping("/update")

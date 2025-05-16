@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Authors Names</title>
+</head>
+<body>
+
+<div>
+  <a href="/authors">
+    <button type="button">Authors</button>
+  </a>
+  <a href="/authors-names">
+    <button type="button">Authors Names Projection</button>
+  </a>
+  <a href="/books">
+    <button type="button">Books</button>
+  </a>
+  <a href="/reviews">
+    <button type="button">Reviews</button>
+  </a>
+  <a href="/readers">
+    <button type="button">Readers</button>
+  </a>
+</div>
+
+<h1>Lista autorów (projekcja)</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Imię</th>
+    <th>Nazwisko</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="author : ${authorNames}">
+    <td th:text="${author.firstName}"></td>
+    <td th:text="${author.lastName}"></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

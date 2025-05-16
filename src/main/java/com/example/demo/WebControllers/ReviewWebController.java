@@ -42,7 +42,8 @@ public class ReviewWebController {
     }
 
     @PostMapping("/reviews/add")
-    public String addReview(@RequestParam int rating, @RequestParam String comment, @RequestParam Long bookId, @RequestParam Long readerId) {
+    public String addReview(@RequestParam int rating, @RequestParam(required = false) String comment, @RequestParam Long bookId, @RequestParam Long readerId) {
+
         reviewService.addReview(rating,comment, bookId, readerId);
         return "redirect:/reviews";
     }

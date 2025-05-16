@@ -22,4 +22,10 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "reader_id")
     private Reader reader;
+
+    @PrePersist
+    public void defaultComment()
+    {
+        this.comment = "Domyślny komentarz";
+    }
 }

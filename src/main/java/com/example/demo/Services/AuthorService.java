@@ -3,9 +3,11 @@ package com.example.demo.Services;
 import com.example.demo.DB.Author;
 import com.example.demo.Repositories.AuthorRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +20,8 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
-    public List<Author> getAuthors(String firstName, String lastName, String sortBy, String order) {
-        Sort.Direction direction = "desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Sort sort = Sort.by(direction, sortBy);
-        return authorRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName, sort);
+    public Page<Author> getAuthors(String firstName, String lastName, Pageable pageable) {
+        return authorRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName, pageable);
     }
 
     public Author getById(Long id) {

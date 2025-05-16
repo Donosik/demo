@@ -3,8 +3,11 @@ package com.example.demo.ApiControllers;
 import com.example.demo.Services.AuthorService;
 import com.example.demo.DB.Author;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
@@ -14,15 +17,19 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping
-    public List<Author> getAuthors(
+    public Page<Author> getAuthors(
             @RequestParam(required = false, defaultValue = "") String firstName,
             @RequestParam(required = false, defaultValue = "") String lastName,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String order) {
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
 
-        return authorService.getAuthors(firstName, lastName, sortBy, order);
+        Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+        return authorService.getAuthors(firstName, lastName,pageable);
     }
-
 
     @PostMapping("/update")
     public void updateAuthor(@ModelAttribute Author author) {

@@ -53,6 +53,14 @@
     <option value="desc" th:selected="${order == 'desc'}">Malejąco</option>
   </select>
 
+  <label>Rozmiar strony:</label>
+  <select name="size">
+    <option value="1" th:selected="${size == '1'}">1</option>
+    <option value="2" th:selected="${size == '2'}">2</option>
+    <option value="5" th:selected="${size == '5'}">5</option>
+    <option value="10" th:selected="${size == '10'}">10</option>
+  </select>
+
   <button type="submit">Wyszukaj</button>
 </form>
 
@@ -85,6 +93,48 @@
   </tr>
   </tbody>
 </table>
+
+<!-- Informacja o aktualnej stronie -->
+<div>
+  <span th:text="'Strona ' + ${page + 1} + ' z ' + ${authorsPage.totalPages}"></span>
+</div>
+
+<!-- Nawigacja -->
+<div>
+  <a th:if="${authorsPage.hasPrevious()}"
+     th:href="@{/authors(firstName=${firstName}, lastName=${lastName}, page=${page - 1}, size=${size}, sortBy=${sortBy}, order=${order})}">
+    <button>Wstecz</button>
+  </a>
+
+  <a th:if="${authorsPage.hasNext()}"
+     th:href="@{/authors(firstName=${firstName}, lastName=${lastName}, page=${page + 1}, size=${size}, sortBy=${sortBy}, order=${order})}">
+    <button>Dalej</button>
+  </a>
+</div>
+
+<!-- Formularz przejścia do konkretnej strony -->
+<form id="goToPageForm" th:action="@{/authors}" method="get">
+  <input type="hidden" name="firstName" th:value="${firstName}" />
+  <input type="hidden" name="lastName" th:value="${lastName}" />
+  <input type="hidden" name="size" th:value="${authorsPage.size}" />
+  <input type="hidden" name="sortBy" th:value="${sortBy}" />
+  <input type="hidden" name="order" th:value="${order}" />
+
+  <label>Idź do strony:</label>
+  <input type="number" id="pageInput" name="page" min="1" th:attr="max=${authorsPage.totalPages}" />
+  <button type="submit">Przejdź</button>
+</form>
+
+<script>
+  document.getElementById('goToPageForm').addEventListener('submit', function(event) {
+    const input = document.getElementById('pageInput');
+    let pageNum = parseInt(input.value, 10);
+    if (!isNaN(pageNum) && pageNum > 0) {
+      // odejmij 1 przed wysłaniem, bo backend liczy od 0
+      input.value = pageNum - 1;
+    }
+  });
+</script>
 
 </body>
 </html>
